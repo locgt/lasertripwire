@@ -1,3 +1,5 @@
+//Laser tripwire sketch - @vmfoo
+
 //playMelody function and pitches.h borrowed from arduino tone tutorial and adapted
 //http://arduino.cc/en/Tutorial/Tone 
 
@@ -26,16 +28,16 @@ void setup() {
 void loop() {
   // read the input on RECEIVER_PIN
   int sensorValue = analogRead(RECEIVER_PIN);
-  // print out the value you read:
-  Serial.println(sensorValue);
+  // print out the value you read if debugging
+  //Serial.println(sensorValue);
   if( sensorValue < THRESHOLD ) {
     digitalWrite(LED_PIN, HIGH);  //Turn it on to show that the trap is set
   } else {
     digitalWrite(LED_PIN, LOW);  //Turn it off 
   }
-  if (digitalRead(ARMED_PIN) && (sensorValue > THRESHOLD) ) { //make noise
+  if (digitalRead(ARMED_PIN) && (sensorValue > THRESHOLD) ) { //make noise if the trap is armed and the laser is off
     Serial.println("INTRUDER ALERT!!");
-    playMelody();  //blocks    
+    playMelody();  //this funciton blocks until melody is over
   }
 }
 
@@ -47,8 +49,8 @@ void playMelody() {
 
     // to calculate the note duration, take one second 
     // divided by the note type.
-    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-     //bumped 1000 up to 1500 to slow the tempo raise it more to slow it down
+    // e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+    // I bumped 1000 up to 1500 to slow the tempo. raise it more to slow it down
     int noteDuration = 1500/noteDurations[thisNote];
     tone(PIEZO_PIN, melody[thisNote],noteDuration);
 
